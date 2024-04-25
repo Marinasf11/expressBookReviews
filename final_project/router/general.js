@@ -69,8 +69,34 @@ public_users.get('/author/:author',function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+   // Initialize an array to store book details
+   let allBooks = [];
+
+   // Iterate over each book in the books database
+   for (let key in books) {
+       if (books.hasOwnProperty(key)) {
+           // Extract title and other details for the current book
+           let bookDetails = {
+               title: books[key].title,
+               author: books[key].author,
+               reviews: books[key].reviews
+               // Add more fields as needed
+           };
+
+           // Push the current book details to the array
+           allBooks.push(bookDetails);
+       }
+   }
+
+   // Check if any books were found
+   if (allBooks.length > 0) {
+       // Return the array of book details as a response
+       res.status(200).json(allBooks);
+   } else {
+       // If no books were found, return a message
+       res.status(404).json({ message: "No books found in the database." });
+   }
+
 });
 
 //  Get book review
