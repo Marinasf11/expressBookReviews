@@ -41,8 +41,30 @@ public_users.get('/isbn/:isbn',function (req, res) {
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const authors = {}; // Object to store authors and their books
+
+    // Iterate through the 'books' object to gather authors and their books
+    for (const key in books) {
+        if (books.hasOwnProperty(key)) {
+            const book = books[key];
+            const author = book.author;
+
+            // Check if the author is already in the 'authors' object
+            if (authors.hasOwnProperty(author)) {
+                authors[author].push(book); // Add the book to the author's existing array
+            } else {
+                authors[author] = [book]; // Create a new array for the author and add the book
+            }
+        }
+    }
+
+    // Check if any authors were found
+    if (Object.keys(authors).length > 0) {
+        res.status(200).json(authors); // Return the object containing authors and their books
+    } else {
+        res.status(404).json({ message: "No authors found in the database." }); // Return a message if no authors were found
+    }
+
 });
 
 // Get all books based on title
